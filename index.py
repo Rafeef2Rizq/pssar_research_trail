@@ -67,3 +67,15 @@ def clean_funding(df):
 df_funding_cleaning = clean_funding(df_funding_excel)
 print('Total funding in CAD:', df_funding_cleaning)
 
+#Q1
+real_publications=df_publication[df_publication["pub_id"] != "P_HIDDEN"]
+top= (
+     real_publications.
+     groupby("researcher_id")["citations"].sum()
+     .reset_index()
+     .merge(df_researchers[["researcher_id","first_name","last_name"]],on="researcher_id",how="left")
+     .sort_values(by="citations",ascending=False)
+     .iloc[0]
+)
+print("Top Researcher:",top["first_name"],top["last_name"],"with",top["citations"],"citations")
+
