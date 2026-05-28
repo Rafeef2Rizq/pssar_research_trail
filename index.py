@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 # Load the dataset
-df = pd.read_csv('Session_data/researchers.csv')
+df_researchers = pd.read_csv('Session_data/researchers.csv')
 #CP1 researcher cleaning
 # Explore
 # print(df.head())
@@ -11,7 +11,7 @@ df = pd.read_csv('Session_data/researchers.csv')
 
 #cleaning
 #Filter
-filtered = df[(df["is_active"] == True) & (df["h_index"] > 15)]
+filtered = df_researchers[(df_researchers["is_active"] == True) & (df_researchers["h_index"] > 15)]
 #sort
 filtered=filtered.sort_values(by="joined_year",ascending=True)
 letters=filtered["last_name"].str[0]
@@ -45,3 +45,13 @@ total_funding=valid_funding['amount_cad_clean'].sum()
 print('total funding in CAD:',total_funding)
 
 print('total funding in CAD:',str(total_funding))
+
+# Merge all 3 files
+merged=(
+     df_researchers.merge(df_publication,on='researcher_id',how='left').merge(df_funding_excel,on='researcher_id',how='left')
+)
+inner_merged=(
+     df_researchers.merge(df_publication,on='researcher_id',how='inner').merge(df_funding_excel,on='researcher_id',how='inner')
+)
+print('Left merged:',{len(merged)})
+print('Inner merged:',{len(inner_merged)})
