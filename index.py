@@ -59,13 +59,16 @@ print('Inner merged:',{len(inner_merged)})
 # cleaning function 
 def clean_funding(df):
     df = df.copy()
-    df["amount_cad_clean"] = pd.to_numeric(df["amount_cad"], errors='coerce')
-    df = df[df["amount_cad_clean"] > 0]
-    total_funding = df['amount_cad_clean'].sum()
-    return total_funding
+    df["amount_cad"] = pd.to_numeric(df["amount_cad"], errors='coerce')
+    df = df[df["amount_cad"] > 0]
+    return df
+
+def total_funding(df):
+    cleaned = clean_funding(df)
+    return cleaned["amount_cad"].sum()
 
 df_funding_cleaning = clean_funding(df_funding_excel)
-print('Total funding in CAD:', df_funding_cleaning)
+print('Total funding in CAD:', total_funding(df_funding_cleaning))
 
 #Q1
 real_publications=df_publication[df_publication["pub_id"] != "P_HIDDEN"]
@@ -79,3 +82,11 @@ top= (
 )
 print("Top Researcher:",top["first_name"],top["last_name"],"with",top["citations"],"citations")
 
+# Q2
+funding_by_field = (
+    df_funding_cleaning
+    .merge(df_researchers[["researcher_id","field"]], on="researcher_id")
+    .groupby("field")["amount_cad"].sum()
+    .sort_values(ascending=False)
+)
+print(f"Q2: ${funding_by_field.iloc[0]} — {funding_by_field.index[0]}")
