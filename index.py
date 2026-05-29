@@ -98,3 +98,7 @@ earliest_researcher =(
      .iloc[0]
 )
 print("Q3: Earliest Active Researcher:",earliest_researcher["first_name"],earliest_researcher["last_name"],"joined in",earliest_researcher["joined_year"])
+
+# Assignment 2 - 4
+merged.to_csv('output/merged_data.csv',index=False)
+print("Merged data saved to 'output/merged_data.csv'")
