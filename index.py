@@ -90,3 +90,11 @@ funding_by_field = (
     .sort_values(ascending=False)
 )
 print(f"Q2: ${funding_by_field.iloc[0]} — {funding_by_field.index[0]}")
+
+# Q3
+earliest_researcher =(
+     df_researchers[df_researchers["is_active"] == True]
+     .sort_values(by="joined_year")
+     .iloc[0]
+)
+print("Q3: Earliest Active Researcher:",earliest_researcher["first_name"],earliest_researcher["last_name"],"joined in",earliest_researcher["joined_year"])
